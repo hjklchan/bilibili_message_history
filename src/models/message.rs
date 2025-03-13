@@ -76,6 +76,41 @@ impl Display for TextMessage {
     }
 }
 
+// ShareMessage 分享消息类型
+#[derive(Debug, Deserialize)]
+pub struct ShareMessage {
+    pub author: String,
+    pub headline: Option<String>,
+    // pub id: String,
+    pub source: u8,
+    // 疑似被废弃
+    // pub source_desc: String,
+    pub thumb: String,
+    pub title: String,
+    pub url: Option<String>,
+    pub bvid: Option<String>,
+}
+
+// 为 String 实现 From<ShareMessage>
+impl From<ShareMessage> for String {
+    fn from(value: ShareMessage) -> Self {
+        format!("{}", value)
+    }
+}
+
+// 为 ShareMessage 实现 Display 特征
+impl Display for ShareMessage {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let bv = if let Some(bvid) = &self.bvid {
+            bvid
+        } else {
+            "无番号"
+        };
+
+        write!(f, "【{}】{}", self.title, bv)
+    }
+}
+
 #[derive(Debug, Default, Clone, Copy)]
 pub enum ViewerKind {
     #[default]

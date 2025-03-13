@@ -1,5 +1,5 @@
 use chrono::Local;
-use models::message::{ImageMessage, Message, TextMessage, ViewerKind};
+use models::message::{ImageMessage, Message, ShareMessage, TextMessage, ViewerKind};
 use models::response::{BilibiliResponse, ResponseData};
 use reqwest::blocking::Client;
 use reqwest::header::HeaderMap;
@@ -23,14 +23,21 @@ pub fn format_message(message: &Message) -> Result<String, String> {
         // 文本消息
         1 => {
             let deserialized = serde_json::from_str::<TextMessage>(&message.content)
-                .map_err(|err| format!("反序列化 [文本消息 (TextMessage)] 时错先错误: {}", err))?;
+                .map_err(|err| format!("反序列化 [文本消息 (TextMessage)] 时发生错误: {}", err))?;
 
             Ok(deserialized.into())
         }
         // 图片消息
         2 => {
             let deserialized = serde_json::from_str::<ImageMessage>(&message.content)
-                .map_err(|err| format!("反序列化 [文本消息 (TextMessage)] 时错先错误: {}", err))?;
+                .map_err(|err| format!("反序列化 [文本消息 (TextMessage)] 时发生错误: {}", err))?;
+
+            Ok(deserialized.into())
+        }
+        // 分享消息
+        7 => {
+            let deserialized = serde_json::from_str::<ShareMessage>(&message.content)
+                .map_err(|err| format!("反序列化 [分享消息 (ShareMessage)] 时发生错误: {}", err))?;
 
             Ok(deserialized.into())
         }
@@ -117,7 +124,6 @@ pub fn run(config: Option<Config>) -> Result<(), String> {
         .unwrap_or_default();
 
     // 创建目录和文件
-
     let datetime = Local::now().format("%Y-%m-%d").to_string();
     let filepath = format!("{}/{}.txt", config.save_path, datetime);
     let path_buf = PathBuf::from(filepath);
