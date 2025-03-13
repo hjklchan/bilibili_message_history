@@ -2,6 +2,12 @@
 name = "bilibili_msg_history"
 version = "0.1.0"
 edition = "2021"
+authors = ["hjkl1"]
+license = "MIT OR Apache-2.0"
+description = "哔哩哔哩聊天记录获取工具"
+homepage = "https://github.com/hjklchan/bilibili_message_history"
+repository = "https://github.com/hjklchan/bilibili_message_history"
+keywords = ["cli", "messages", "bilibili", "哔哩哔哩"]
 
 [dependencies]
 reqwest = { version = "0.12.12", features = ["blocking", "json"] }
