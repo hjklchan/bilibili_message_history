@@ -1,5 +1,5 @@
-use models::message::{ImageMessage, Message, TextMessage, ViewerKind};
 use chrono::Local;
+use models::message::{ImageMessage, Message, TextMessage, ViewerKind};
 use models::response::{BilibiliResponse, ResponseData};
 use reqwest::blocking::Client;
 use reqwest::header::HeaderMap;
@@ -133,11 +133,13 @@ pub fn run(config: Option<Config>) -> Result<(), String> {
     let filepath = format!("{}/{}.txt", config.save_path, datetime);
     let path_buf = PathBuf::from(filepath);
 
-    if fs::exists(&path_buf).unwrap() {
-        fs::remove_file(&path_buf).unwrap();
+    if fs::exists(&path_buf).map_err(|err| format!("检查文件是否存在时发生错误: {}", err))?
+    {
+        fs::remove_file(&path_buf).map_err(|err| format!("删除文件时发生错误: {}", err))?;
     }
 
-    let mut file = fs::File::create(&path_buf).unwrap();
+    let mut file =
+        fs::File::create(&path_buf).map_err(|err| format!("创建文件时发生错误: {}", err))?;
 
     println!("Start getting the message data");
 
@@ -161,17 +163,13 @@ pub fn run(config: Option<Config>) -> Result<(), String> {
             if let Some(messages) = bilibili_response.data.messages {
                 messages.iter().for_each(|message| {
                     // 其他逻辑
-                    let nickname = person_nickname(
-                        viewer,
-                        message,
-                        &talker_nickname,
-                        talker_uid,
-                    );
+                    let nickname = person_nickname(viewer, message, &talker_nickname, talker_uid);
+                    let formatted_message = format_message(&message).unwrap();
                     let message_text = format!(
                         "[{}]{}: {}\n",
                         message.datetime(),
                         nickname,
-                        format_message(&message).unwrap()
+                        formatted_message,
                     );
 
                     if let Err(err) = file.write(message_text.as_bytes()) {
@@ -186,12 +184,7 @@ pub fn run(config: Option<Config>) -> Result<(), String> {
         if let Some(messages) = bilibili_response.data.messages {
             messages.iter().for_each(|message| {
                 // 其他逻辑
-                let nickname = person_nickname(
-                    viewer,
-                    message,
-                    &talker_nickname,
-                    talker_uid,
-                );
+                let nickname = person_nickname(viewer, message, &talker_nickname, talker_uid);
                 let message_text = format!(
                     "[{}]{}: {}\n",
                     message.datetime(),
