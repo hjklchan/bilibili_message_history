@@ -32,17 +32,6 @@ pub fn format_message(message: &Message) -> Result<String, String> {
             let deserialized = serde_json::from_str::<ImageMessage>(&message.content)
                 .map_err(|err| format!("反序列化 [文本消息 (TextMessage)] 时错先错误: {}", err))?;
 
-            // let formatted_content = format!(
-            //     "[图片][{}原图] {}",
-            //     {
-            //         if deserialized.original == 1 {
-            //             ""
-            //         } else {
-            //             "非"
-            //         }
-            //     },
-            //     deserialized.url
-            // );
             Ok(deserialized.into())
         }
         // 其他消息
