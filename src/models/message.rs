@@ -101,6 +101,11 @@ impl From<ShareMessage> for String {
 // 为 ShareMessage 实现 Display 特征
 impl Display for ShareMessage {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // TODO 当分享消息的内容类型为 5 时，bvid 有效
+        if self.source == 5 {
+            todo!()
+        };
+
         let bv = if let Some(bvid) = &self.bvid {
             bvid
         } else {
