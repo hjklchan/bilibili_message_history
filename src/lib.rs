@@ -1,7 +1,5 @@
 use chrono::Local;
 use models::message::{ImageMessage, Message, ShareMessage, TextMessage, ViewerKind};
-use models::response::{BilibiliResponse, ResponseData};
-use reqwest::blocking::Client;
 use reqwest::header::HeaderMap;
 use std::fs;
 use std::io::Write;
@@ -11,7 +9,7 @@ use std::time::Duration;
 pub mod api;
 pub mod models;
 
-// format_message
+// format_message 格式化消息
 //
 // 消息格式化
 // 并不处理消息的存储
@@ -67,7 +65,6 @@ pub fn person_nickname<'a>(
     }
 }
 
-#[deprecated(since = "0.0.2", note = "下个版本不在使用，将会被 Args 结构体代替")]
 #[derive(Debug, Default)]
 pub struct Config {
     pub cookie: String,
