@@ -94,8 +94,7 @@ pub fn run(config: Option<Config>) -> Result<(), String> {
     );
 
     // 获取最新的一条消息的元数据
-    let bilibili_response = api::get_latest_msg_api(headers.clone(), talker_uid)
-        .map_err(|err| format!("反序列化时发生错误: {}", err))?;
+    let bilibili_response = api::get_latest_msg_api(headers.clone(), talker_uid)?;
     // 获取最新的 end_seqno
     let mut mutable_end_seqno = bilibili_response.data.max_seqno;
     // 获取最新一条消息的 timestamp
