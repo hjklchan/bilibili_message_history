@@ -38,17 +38,9 @@ pub struct ImageMessage {
 
 impl Display for ImageMessage {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let formatted_content = format!(
-            "[图片][{}原图] {}",
-            {
-                if self.original == 1 {
-                    ""
-                } else {
-                    "非"
-                }
-            },
-            self.url
-        );
+        let is_original = if self.original == 1 { "" } else { "非" };
+        let formatted_content = format!("[图片][{}原图] {}", is_original, self.url);
+
         write!(f, "{}", formatted_content)
     }
 }
@@ -102,8 +94,7 @@ impl From<ShareMessage> for String {
 impl Display for ShareMessage {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // TODO 当分享消息的内容类型为 5 时，bvid 有效
-        if self.source == 5 {
-        };
+        if self.source == 5 {};
 
         let bv = if let Some(bvid) = &self.bvid {
             bvid

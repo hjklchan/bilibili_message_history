@@ -128,8 +128,7 @@ pub fn run(config: Option<Config>) -> Result<(), String> {
 
     loop {
         let bilibili_response =
-            api::get_message_collect_api(headers.clone(), talker_uid, size, mutable_end_seqno)
-                .map_err(|err| format!("反序列化时发生错误: {}", err))?;
+            api::get_message_collect_api(headers.clone(), talker_uid, size, mutable_end_seqno)?;
 
         if bilibili_response.code != 0 {
             break;

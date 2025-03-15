@@ -12,7 +12,6 @@ pub struct BilibiliResponse<T> {
 #[derive(Debug, Deserialize)]
 pub struct ResponseData<T> {
     pub messages: Option<Vec<T>>,
-    // has_more: i8,
     pub min_seqno: u64,
     pub max_seqno: u64,
     pub has_more: i32,
